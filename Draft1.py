@@ -157,7 +157,7 @@ mdl.DC_loadflow = Constraint(mdl.Lines, rule=DC_loadflow_rule)
 cost_thermal_gen = sum((a_gen[n][k] * mdl.gen[n,k]** 2 +b_gen[n][k] * mdl.gen[n,k] + c_gen[n][k])*fuel_gen[n][k]
                         for k in mdl.Generators for n in mdl.Nodes if (n,k) in mdl.gen_node)
 
-mdl.obj = Objective(expr=total_cost_generators, sense=minimize)
+mdl.obj = Objective(expr=cost_thermal_gen, sense=minimize)
 
 
 # We have to tell Pyomo that we want dual variables
