@@ -367,10 +367,10 @@ def power_balance_rule(self, n):
 mdl.power_balance = Constraint(mdl.Nodes, rule=power_balance_rule)
 
 
-#Constrain regarding the share of the state generator
+#-----------------Constrain regarding the share of the state generator
 #this is the restriction that will help me to model the policy that want
-#to fix the participation of the state in 54% on the generation
-def state_share_rule(self, n, g):
+#to fix the participation of the state in 54% on the generation-------------------
+def state_share_rule(self, n):
     tot_dem = sum(inelastic_dem[n][k] for k in mdl.Consumers for n in mdl.Nodes)
     tot_gen_t_state = sum(mdl.gen_t[n,g] for g in mdl.id_t for n in mdl.Nodes  if (n,g) in mdl.gen_t_CFE_node)
     tot_gen_q_state = sum(mdl.gen_q[n,g] for g in mdl.id_q for n in mdl.Nodes  if (n,g) in mdl.gen_q_CFE_node)
@@ -383,9 +383,9 @@ def state_share_rule(self, n, g):
     tot_gen_r_state = sum(max_gen_r[n][g] for g in mdl.id_r for n in mdl.Nodes  if (n,g) in mdl.gen_r_CFE_node)*CF_river
 
     return (tot_gen_t_state + tot_gen_q_state + tot_gen_s_state +tot_gen_w_state +tot_gen_h_state
-           +tot_gen_b_state +tot_gen_c_state +tot_gen_g_state +tot_gen_r_state) == 0.5*tot_dem
+            +tot_gen_b_state +tot_gen_c_state +tot_gen_g_state +tot_gen_r_state) == 0.5*tot_dem
 
-mdl.gen_state_constrait = Constraint(mdl.gen_t_CFE_node , rule=state_share_rule)
+mdl.gen_state_constrait = Constraint(mdl.Nodes , rule=state_share_rule)
 mdl.gen_state_constrait.pprint()
 
 # Constraint for the min flow in the lines
